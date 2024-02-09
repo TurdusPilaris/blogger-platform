@@ -4,4 +4,4 @@ import {deleteAllController} from "./deleteAllController";
 
 export const testingRouter = Router();
 
-testingRouter.get('/', deleteAllController);
+testingRouter.delete('/all-data', deleteAllController);

@@ -1,5 +1,7 @@
 import {agent as supertest} from 'supertest';
 import {app, db} from "../src/main/app";
+import {postsRepository} from "../src/features/posts/postsRepository";
+import {blogsRepository} from "../src/features/blogs/blogsRepository";
 const CORRECT_ADMIN_AUTH_BASE64 = 'Basic YWRtaW46cXdlcnR5';
 const UNCORRECT_ADMIN_AUTH_BASE64 = 'Basic YWRtaW46cXdlcnR9';
 // import {describe} from "node:test";
@@ -101,4 +103,37 @@ describe('/blogs', () =>{
             .expect(204);
 
     })
+
+    it('GET posts with id OK = []', async () => {
+
+        const res = await req
+            .get('/posts/4')
+            .expect(200);
+            expect(res.body).toStrictEqual(postsRepository.findPost('4'));
+    })
+
+    it('GET posts with id not found = []', async () => {
+
+        const res = await req
+            .get('/posts/4341')
+            .expect(404);
+
+    })
+
+    it('GET blogs with id OK = []', async () => {
+
+        const res = await req
+            .get('/blogs/01')
+            .expect(200);
+        expect(res.body).toStrictEqual(blogsRepository.findBlog('01'));
+    })
+
+    it('GET blogs with id not found = []', async () => {
+
+        const res = await req
+            .get('/blogs/4341')
+            .expect(404);
+
+    })
+
 })

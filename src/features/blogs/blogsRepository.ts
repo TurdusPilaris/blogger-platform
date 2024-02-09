@@ -1,8 +1,8 @@
-import {TypeBlogViewModel, TypePostViewModel} from "../../input-output-types/inputOutputTypes";
+import {TypeBlogInputModel, TypeBlogViewModel, TypePostViewModel} from "../../input-output-types/inputOutputTypes";
 import {db} from "../../main/app";
 
 export const blogsRepository ={
-    async create(input: any) {
+    async create(input: TypeBlogInputModel) {
 
         // { input
         //     "title": "string",
@@ -10,13 +10,15 @@ export const blogsRepository ={
         //     "content": "string",
         //     "blogId": "string"
         // }
-        // const newBlog: TypeBlogViewModel = {
-        //     // ...input,
-        //     // id: Date.now() + Math.random(),
-        //     // blogName: 'find name blog'
-        // }
-        // db.blogs.push(newPost);
-        // return newPost;
+        const newBlog: TypeBlogViewModel = {
+            id: (Date.now() + Math.random()).toString(),
+            name: input.name,
+            description: input.description,
+            websiteUrl: input.websiteUrl,
+
+        }
+        db.blogs.push(newBlog);
+        return newBlog;
     },
 
     async find(id:string):Promise<TypeBlogViewModel|undefined> {
@@ -42,5 +44,11 @@ export const blogsRepository ={
     findBlog(id: string):TypeBlogViewModel| undefined  {
         const foundBlog = db.blogs.find(a => a.id === id);
         return foundBlog;
+    },
+    updateBlog(blog: TypeBlogViewModel, input: TypeBlogInputModel) {
+        blog.name = input.name;
+        blog.description = input.description;
+        blog.websiteUrl = input.websiteUrl;
+
     }
 }

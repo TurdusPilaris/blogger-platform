@@ -25,7 +25,7 @@ export type TypePostViewModel = {
     shortDescription: string;
     content: string;
     blogId: string;
-    blogName: string;
+    blogName: string|undefined;
 }
 
 export type TypeFieldError = {

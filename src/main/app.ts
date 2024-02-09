@@ -6,8 +6,10 @@ export const app = express();
 
 export const db = createDB();
 
-addRoutes(app);
+
 
 const jsonBodyMiddleware = express.json();
 app.use(jsonBodyMiddleware);
+
+addRoutes(app);
 
