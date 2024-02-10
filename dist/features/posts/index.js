@@ -1,0 +1,18 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.postsRouter = void 0;
+const express_1 = require("express");
+const getPostsController_1 = require("./getPostsController");
+const deletePostsController_1 = require("./deletePostsController");
+const input_validation_middleware_1 = require("../../middlewares/input-validation-middleware");
+const getPostsControllerByID_1 = require("./getPostsControllerByID");
+const postForPostsController_1 = require("./postForPostsController");
+const putPostsController_1 = require("./putPostsController");
+exports.postsRouter = (0, express_1.Router)();
+exports.postsRouter.get('/', getPostsController_1.getPostsController);
+exports.postsRouter.get('/:id', getPostsControllerByID_1.getPostsControllerByID);
+// postsRouter.post('/', authMiddleware, postInputValidatorPost,  customBlogIdMiddleware, inputValidationMiddleware, postForPostsController);
+exports.postsRouter.post('/', input_validation_middleware_1.authMiddleware, input_validation_middleware_1.postInputValidatorPost, input_validation_middleware_1.inputValidationMiddleware, postForPostsController_1.postForPostsController);
+// postsRouter.put('/:id', authMiddleware, postInputValidatorPost, customBlogIdMiddleware, inputValidationMiddleware,  putPostsController);
+exports.postsRouter.put('/:id', input_validation_middleware_1.authMiddleware, input_validation_middleware_1.postInputValidatorPost, input_validation_middleware_1.inputValidationMiddleware, putPostsController_1.putPostsController);
+exports.postsRouter.delete('/:id', input_validation_middleware_1.authMiddleware, deletePostsController_1.deletePostsController);
