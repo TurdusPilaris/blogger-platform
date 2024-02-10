@@ -2,9 +2,9 @@
   "version": 2,
   "name": "blogger-platform",
   "builds": [
-    { "src": "src/main/app.ts", "use": "@vercel/node" }
+    { "src": "src/index.ts", "use": "@vercel/node" }
   ],
   "routes": [
-    { "src": "/(.*)", "dest": "src/main/app.ts" }
+    { "src": "/(.*)", "dest": "src/index.ts" }
   ]
 }
