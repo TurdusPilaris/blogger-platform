@@ -25,11 +25,11 @@ export const blogsRepository ={
         const foundBlog = db.blogs.find(b => b.id === id);
         return foundBlog;
     },
-    getAllBlogs(): TypeBlogViewModel[] {
+    async getAllBlogs() {
         return db.blogs;
     },
 
-    deleteBlog(id:string): string|undefined {
+    async deleteBlog(id:string) {
 
         for(let i=0; i < db.blogs.length; i++) {
             if (db.blogs[i].id === id) {
@@ -41,11 +41,11 @@ export const blogsRepository ={
         return undefined;
 
     },
-    findBlog(id: string):TypeBlogViewModel| undefined  {
+    async findBlog(id: string)  {
         const foundBlog = db.blogs.find(a => a.id === id);
         return foundBlog;
     },
-    updateBlog(blog: TypeBlogViewModel, input: TypeBlogInputModel) {
+    async updateBlog(blog: TypeBlogViewModel, input: TypeBlogInputModel) {
         blog.name = input.name;
         blog.description = input.description;
         blog.websiteUrl = input.websiteUrl;

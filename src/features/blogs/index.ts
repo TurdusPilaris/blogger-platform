@@ -16,14 +16,8 @@ import {putBlogsController} from "./putBlogsController";
 
 export const blogsRouter = Router();
 
-// blogsRouter.get('/:id',
-//     inputValidationMiddleware,
-//     ...postInputValidator,
-//
-//     getBlogsController);
-
 blogsRouter.get('/', getBlogsController);
- blogsRouter.get('/:id', getBlogsControllerByID);
- blogsRouter.post('/', authMiddleware, postInputValidatorBlog, inputValidationMiddleware, postBlogsController);
- blogsRouter.put('/:id', authMiddleware, postInputValidatorBlog, inputValidationMiddleware,  putBlogsController);
- blogsRouter.delete('/:id', authMiddleware, deleteBlogsController);
+blogsRouter.get('/:id', getBlogsControllerByID);
+blogsRouter.post('/', authMiddleware, postInputValidatorBlog, inputValidationMiddleware, postBlogsController);
+blogsRouter.put('/:id', authMiddleware, postInputValidatorBlog, inputValidationMiddleware,  putBlogsController);
+blogsRouter.delete('/:id', authMiddleware, deleteBlogsController);

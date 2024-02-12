@@ -11,19 +11,15 @@ import {TypeBD} from "../../db/db";
 export const postsRepository ={
     async create(input: TypePostInputModelModel) {
 
-        // { input
-        //     "title": "string",
-        //     "shortDescription": "string",
-        //     "content": "string",
-        //     "blogId": "string"
-        // }
+        const foundedBlog = await blogsRepository.findBlog(input.blogId);
         const newPost: TypePostViewModel = {
+
             id: (Date.now() + Math.random()).toString(),
             title: input.title,
             shortDescription: input.shortDescription,
             content: input.content,
             blogId: input.blogId,
-            blogName: blogsRepository.findBlog(input.blogId)?.name,
+            blogName: await foundedBlog?.name,
         }
         db.posts.push(newPost);
         return newPost;
@@ -33,7 +29,7 @@ export const postsRepository ={
         return foundPost;
     },
     async findForOutput(id: string) {
-        const foundPost = db.posts.find(p => p.id === id);
+        const foundPost =await db.posts.find(p => p.id === id);
         if(!foundPost) {return undefined}
         return this.mapToOutput(foundPost);
     },
@@ -44,10 +40,10 @@ export const postsRepository ={
 
         }
     },
-    getAllPosts():TypePostViewModel[]  {
+    async getAllPosts()  {
         return db.posts;
     },
-    deletePost(id:string): string|undefined {
+    async deletePost(id:string) {
 
         for(let i=0; i < db.posts.length; i++) {
             if (db.posts[i].id === id) {
@@ -56,19 +52,20 @@ export const postsRepository ={
             }
         }
 
-        return undefined;
+        return Promise<undefined>;
 
     },
-    findPost(id: string):TypePostViewModel| undefined  {
-        const foundPost = db.posts.find(a => a.id === id);
+    async findPost(id: string)  {
+        const foundPost = await db.posts.find(a => a.id === id);
         return foundPost;
     },
-    updatePost(post: TypePostViewModel, input: TypePostInputModelModel) {
+    async updatePost(post: TypePostViewModel, input: TypePostInputModelModel) {
+        let foundedBlog = await blogsRepository.findBlog(post.blogId);
         post.title = input.title;
         post.shortDescription = input.shortDescription;
         post.content = input.content;
         post.blogId = input.blogId??post.blogId;
-        post.blogName = blogsRepository.findBlog(post.blogId)?.name;
+        post.blogName = foundedBlog?.name;
 
     }
 
