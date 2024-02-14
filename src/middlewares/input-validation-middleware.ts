@@ -1,7 +1,7 @@
 import {body, validationResult} from "express-validator";
 import {NextFunction, Response, Request} from "express";
-import {postsRepository} from "../features/posts/postsRepository";
-import {blogsRepository} from "../features/blogs/blogsRepository";
+import {blogsMongoRepository} from "../features/blogs/blogsMongoRepository";
+import {ObjectId} from "mongodb";
 
 export const inputValidationMiddleware = (req:Request, res: Response, next: NextFunction): any => {
 
@@ -19,7 +19,7 @@ export const postInputValidator =
         body('title').trim().isString(),
         body('content').trim().isLength({min: 0, max: 1000}),
         body('blogId').custom(async (blogId) => {
-            await postsRepository.find(blogId)
+            await blogsMongoRepository.find(new ObjectId(blogId))
 }) ,
     ]
 
@@ -30,27 +30,18 @@ export const postInputValidatorBlog =
         body('websiteUrl').isURL().withMessage('Is not URL'),
 
     ]
-// export const customBlogIdMiddleware = (req:Request, res: Response, next: NextFunction) => {
-//
-//     if(!req.body.blogId){
-//         return;
-//     } else {
-//     body('blogId').custom(async value => {
-//         const foundBlog = await blogsRepository.find(value)
-//         if(!foundBlog) {
-//             throw new Error('Blog not found')
-//         }
-//     })}
-// }
 
 export const customBlogIdMiddleware =
 
-        body('blogId').custom(async value => {
-            const foundBlog = await blogsRepository.find(value)
-            if(!foundBlog) {
-                throw new Error('Blog not found')
-            }
-        });
+    body('blogId').custom(async value => {
+        if (!ObjectId.isValid(value)) {
+            throw new Error('Blog ID is not valid')
+        }
+        const foundBlog = await blogsMongoRepository.find(new ObjectId(value))
+        if (!foundBlog) {
+            throw new Error('Blog not found')
+        }
+    });
 
 
 export const titleValidation = body('title').trim().isLength({min: 3, max: 30}).withMessage('Field should be from 3 to 30');
@@ -62,8 +53,11 @@ export const postInputValidatorPost =
         body('shortDescription').trim().isLength({min: 1, max: 100}).withMessage('Field should be from 1 to 100'),
         body('content').trim().isLength({min: 1, max: 1000}).withMessage('Field should be from 1 to 1000'),
         body('blogId').custom(async value => {
+            if (!ObjectId.isValid(value)) {
+                throw new Error('Blog ID is not valid')
+            };
             if(value) {
-            const foundBlog = await blogsRepository.find(value)
+            const foundBlog = await blogsMongoRepository.find(new ObjectId(value))
             if(!foundBlog) {
                 throw new Error('Blog not found')
             }}

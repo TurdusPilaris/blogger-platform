@@ -11,8 +11,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.authMiddleware = exports.postInputValidatorPost = exports.titleValidation = exports.customBlogIdMiddleware = exports.postInputValidatorBlog = exports.postInputValidator = exports.inputValidationMiddleware = void 0;
 const express_validator_1 = require("express-validator");
-const postsRepository_1 = require("../features/posts/postsRepository");
-const blogsRepository_1 = require("../features/blogs/blogsRepository");
+const blogsMongoRepository_1 = require("../features/blogs/blogsMongoRepository");
+const mongodb_1 = require("mongodb");
 const inputValidationMiddleware = (req, res, next) => {
     const errors = (0, express_validator_1.validationResult)(req);
     if (!errors.isEmpty()) {
@@ -28,7 +28,7 @@ exports.postInputValidator = [
     (0, express_validator_1.body)('title').trim().isString(),
     (0, express_validator_1.body)('content').trim().isLength({ min: 0, max: 1000 }),
     (0, express_validator_1.body)('blogId').custom((blogId) => __awaiter(void 0, void 0, void 0, function* () {
-        yield postsRepository_1.postsRepository.find(blogId);
+        yield blogsMongoRepository_1.blogsMongoRepository.find(new mongodb_1.ObjectId(blogId));
     })),
 ];
 exports.postInputValidatorBlog = [
@@ -36,20 +36,11 @@ exports.postInputValidatorBlog = [
     (0, express_validator_1.body)('description').trim().isLength({ min: 1, max: 500 }).withMessage('Name should be from 1 to 500'),
     (0, express_validator_1.body)('websiteUrl').isURL().withMessage('Is not URL'),
 ];
-// export const customBlogIdMiddleware = (req:Request, res: Response, next: NextFunction) => {
-//
-//     if(!req.body.blogId){
-//         return;
-//     } else {
-//     body('blogId').custom(async value => {
-//         const foundBlog = await blogsRepository.find(value)
-//         if(!foundBlog) {
-//             throw new Error('Blog not found')
-//         }
-//     })}
-// }
 exports.customBlogIdMiddleware = (0, express_validator_1.body)('blogId').custom((value) => __awaiter(void 0, void 0, void 0, function* () {
-    const foundBlog = yield blogsRepository_1.blogsRepository.find(value);
+    if (!mongodb_1.ObjectId.isValid(value)) {
+        throw new Error('Blog ID is not valid');
+    }
+    const foundBlog = yield blogsMongoRepository_1.blogsMongoRepository.find(new mongodb_1.ObjectId(value));
     if (!foundBlog) {
         throw new Error('Blog not found');
     }
@@ -61,8 +52,12 @@ exports.postInputValidatorPost = [
     (0, express_validator_1.body)('shortDescription').trim().isLength({ min: 1, max: 100 }).withMessage('Field should be from 1 to 100'),
     (0, express_validator_1.body)('content').trim().isLength({ min: 1, max: 1000 }).withMessage('Field should be from 1 to 1000'),
     (0, express_validator_1.body)('blogId').custom((value) => __awaiter(void 0, void 0, void 0, function* () {
+        if (!mongodb_1.ObjectId.isValid(value)) {
+            throw new Error('Blog ID is not valid');
+        }
+        ;
         if (value) {
-            const foundBlog = yield blogsRepository_1.blogsRepository.find(value);
+            const foundBlog = yield blogsMongoRepository_1.blogsMongoRepository.find(new mongodb_1.ObjectId(value));
             if (!foundBlog) {
                 throw new Error('Blog not found');
             }
