@@ -1,4 +1,3 @@
-import {app} from "./app";
 import {Express} from "express";
 import {testingRouter} from "../features/testing";
 import {postsRouter} from "../features/posts";
