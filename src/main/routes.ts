@@ -10,7 +10,6 @@ export const PATH = {
     POSTS: '/posts',
     TESTING: '/testing'
 }
-
 export const addRoutes = (app: Express) => {
     app.use(PATH.TESTING, testingRouter);
     app.use(PATH.POSTS, postsRouter);
