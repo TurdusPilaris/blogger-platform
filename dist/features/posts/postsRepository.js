@@ -14,21 +14,15 @@ const app_1 = require("../../main/app");
 const blogsRepository_1 = require("../blogs/blogsRepository");
 exports.postsRepository = {
     create(input) {
-        var _a;
         return __awaiter(this, void 0, void 0, function* () {
-            // { input
-            //     "title": "string",
-            //     "shortDescription": "string",
-            //     "content": "string",
-            //     "blogId": "string"
-            // }
+            const foundedBlog = yield blogsRepository_1.blogsRepository.findBlog(input.blogId);
             const newPost = {
                 id: (Date.now() + Math.random()).toString(),
                 title: input.title,
                 shortDescription: input.shortDescription,
                 content: input.content,
                 blogId: input.blogId,
-                blogName: (_a = blogsRepository_1.blogsRepository.findBlog(input.blogId)) === null || _a === void 0 ? void 0 : _a.name,
+                blogName: yield (foundedBlog === null || foundedBlog === void 0 ? void 0 : foundedBlog.name),
             };
             app_1.db.posts.push(newPost);
             return newPost;
@@ -42,7 +36,7 @@ exports.postsRepository = {
     },
     findForOutput(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const foundPost = app_1.db.posts.find(p => p.id === id);
+            const foundPost = yield app_1.db.posts.find(p => p.id === id);
             if (!foundPost) {
                 return undefined;
             }
@@ -56,27 +50,36 @@ exports.postsRepository = {
         };
     },
     getAllPosts() {
-        return app_1.db.posts;
+        return __awaiter(this, void 0, void 0, function* () {
+            return app_1.db.posts;
+        });
     },
     deletePost(id) {
-        for (let i = 0; i < app_1.db.posts.length; i++) {
-            if (app_1.db.posts[i].id === id) {
-                app_1.db.posts.splice(i, 1);
-                return id;
+        return __awaiter(this, void 0, void 0, function* () {
+            for (let i = 0; i < app_1.db.posts.length; i++) {
+                if (app_1.db.posts[i].id === id) {
+                    app_1.db.posts.splice(i, 1);
+                    return id;
+                }
             }
-        }
-        return undefined;
+            return Promise;
+        });
     },
     findPost(id) {
-        const foundPost = app_1.db.posts.find(a => a.id === id);
-        return foundPost;
+        return __awaiter(this, void 0, void 0, function* () {
+            const foundPost = yield app_1.db.posts.find(a => a.id === id);
+            return foundPost;
+        });
     },
     updatePost(post, input) {
-        var _a, _b;
-        post.title = input.title;
-        post.shortDescription = input.shortDescription;
-        post.content = input.content;
-        post.blogId = (_a = input.blogId) !== null && _a !== void 0 ? _a : post.blogId;
-        post.blogName = (_b = blogsRepository_1.blogsRepository.findBlog(post.blogId)) === null || _b === void 0 ? void 0 : _b.name;
+        var _a;
+        return __awaiter(this, void 0, void 0, function* () {
+            let foundedBlog = yield blogsRepository_1.blogsRepository.findBlog(post.blogId);
+            post.title = input.title;
+            post.shortDescription = input.shortDescription;
+            post.content = input.content;
+            post.blogId = (_a = input.blogId) !== null && _a !== void 0 ? _a : post.blogId;
+            post.blogName = foundedBlog === null || foundedBlog === void 0 ? void 0 : foundedBlog.name;
+        });
     }
 };

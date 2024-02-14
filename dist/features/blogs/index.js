@@ -9,11 +9,6 @@ const getBlogsControllerByID_1 = require("./getBlogsControllerByID");
 const postBlogsController_1 = require("./postBlogsController");
 const putBlogsController_1 = require("./putBlogsController");
 exports.blogsRouter = (0, express_1.Router)();
-// blogsRouter.get('/:id',
-//     inputValidationMiddleware,
-//     ...postInputValidator,
-//
-//     getBlogsController);
 exports.blogsRouter.get('/', getBlogsController_1.getBlogsController);
 exports.blogsRouter.get('/:id', getBlogsControllerByID_1.getBlogsControllerByID);
 exports.blogsRouter.post('/', input_validation_middleware_1.authMiddleware, input_validation_middleware_1.postInputValidatorBlog, input_validation_middleware_1.inputValidationMiddleware, postBlogsController_1.postBlogsController);

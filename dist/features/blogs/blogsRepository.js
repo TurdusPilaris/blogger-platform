@@ -37,24 +37,32 @@ exports.blogsRepository = {
         });
     },
     getAllBlogs() {
-        return app_1.db.blogs;
+        return __awaiter(this, void 0, void 0, function* () {
+            return app_1.db.blogs;
+        });
     },
     deleteBlog(id) {
-        for (let i = 0; i < app_1.db.blogs.length; i++) {
-            if (app_1.db.blogs[i].id === id) {
-                app_1.db.blogs.splice(i, 1);
-                return id;
+        return __awaiter(this, void 0, void 0, function* () {
+            for (let i = 0; i < app_1.db.blogs.length; i++) {
+                if (app_1.db.blogs[i].id === id) {
+                    app_1.db.blogs.splice(i, 1);
+                    return id;
+                }
             }
-        }
-        return undefined;
+            return undefined;
+        });
     },
     findBlog(id) {
-        const foundBlog = app_1.db.blogs.find(a => a.id === id);
-        return foundBlog;
+        return __awaiter(this, void 0, void 0, function* () {
+            const foundBlog = app_1.db.blogs.find(a => a.id === id);
+            return foundBlog;
+        });
     },
     updateBlog(blog, input) {
-        blog.name = input.name;
-        blog.description = input.description;
-        blog.websiteUrl = input.websiteUrl;
+        return __awaiter(this, void 0, void 0, function* () {
+            blog.name = input.name;
+            blog.description = input.description;
+            blog.websiteUrl = input.websiteUrl;
+        });
     }
 };

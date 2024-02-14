@@ -1,14 +1,25 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getPostsControllerByID = void 0;
-const postsRepository_1 = require("./postsRepository");
-const getPostsControllerByID = (req, res) => {
-    const foundPost = postsRepository_1.postsRepository.findPost(req.params.id);
+const postMongoRepository_1 = require("./postMongoRepository");
+const mongodb_1 = require("mongodb");
+const getPostsControllerByID = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    // const foundPost = await postsRepository.findPost(req.params.id);
+    const foundPost = yield postMongoRepository_1.postsMongoRepository.findForOutput(new mongodb_1.ObjectId(req.params.id));
     if (!foundPost) {
         res.sendStatus(404);
     }
     res
         .status(200)
         .send(foundPost);
-};
+});
 exports.getPostsControllerByID = getPostsControllerByID;

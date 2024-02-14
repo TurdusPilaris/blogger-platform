@@ -17,5 +17,5 @@ postsRouter.get('/:id', getPostsControllerByID);
 // postsRouter.post('/', authMiddleware, postInputValidatorPost,  customBlogIdMiddleware, inputValidationMiddleware, postForPostsController);
 postsRouter.post('/', authMiddleware, postInputValidatorPost,   inputValidationMiddleware, postForPostsController);
  // postsRouter.put('/:id', authMiddleware, postInputValidatorPost, customBlogIdMiddleware, inputValidationMiddleware,  putPostsController);
-  postsRouter.put('/:id', authMiddleware, postInputValidatorPost, inputValidationMiddleware,  putPostsController);
+ postsRouter.put('/:id', authMiddleware, postInputValidatorPost, inputValidationMiddleware,  putPostsController);
 postsRouter.delete('/:id', authMiddleware, deletePostsController);

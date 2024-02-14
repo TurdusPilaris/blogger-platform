@@ -10,11 +10,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.postForPostsController = void 0;
-const postsRepository_1 = require("./postsRepository");
+// import {postsRepository} from "./postsRepository";
+const postMongoRepository_1 = require("./postMongoRepository");
 const postForPostsController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const newPost = yield postsRepository_1.postsRepository.create(req.body);
-    res
-        .status(201)
-        .send(newPost);
+    // const newPost = await postsRepository.create(req.body);
+    //
+    // res
+    //     .status(201)
+    //      .send(newPost);
+    const insertedInfo = yield postMongoRepository_1.postsMongoRepository.create(req.body);
+    if (insertedInfo) {
+        const newPost = yield postMongoRepository_1.postsMongoRepository.findForOutput(insertedInfo.insertedId);
+        res
+            .status(201)
+            .send(newPost);
+    }
 });
 exports.postForPostsController = postForPostsController;

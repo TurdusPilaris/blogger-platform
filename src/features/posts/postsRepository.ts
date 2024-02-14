@@ -1,6 +1,4 @@
 import {
-    TypeBlogInputModel,
-    TypeBlogViewModel,
     TypePostInputModelModel,
     TypePostViewModel
 } from "../../input-output-types/inputOutputTypes";
@@ -14,12 +12,13 @@ export const postsRepository ={
         const foundedBlog = await blogsRepository.findBlog(input.blogId);
         const newPost: TypePostViewModel = {
 
-            id: (Date.now() + Math.random()).toString(),
+             id: (Date.now() + Math.random()).toString(),
             title: input.title,
             shortDescription: input.shortDescription,
             content: input.content,
             blogId: input.blogId,
             blogName: await foundedBlog?.name,
+
         }
         db.posts.push(newPost);
         return newPost;
